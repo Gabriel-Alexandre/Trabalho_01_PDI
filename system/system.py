@@ -134,41 +134,43 @@ class PdiSystem:
         return new_img
 
     @staticmethod    
-    def histogramExpansion(image):
+    def histogramExpansion(image, L, histogram):
         
-        new_img = np.array(image)
-        new_img = np.abs(new_img)
+        img = np.array(image, dtype=float)
+        img = np.abs(img)
 
-        rows = len(new_img)
-        columns = len(new_img[0])
-
-        histg = histogram(new_img, 256)
+        rows = len(img)
+        columns = len(img[0])
 
         rmax = 0
-        rmin = 255
+        rmin = L-1
 
-        for i, item in enumerate(histg):
+        for i, item in enumerate(histogram):
             if item[0] > 0 and i > rmax:
                 rmax = i
             if item[0] > 0 and i < rmin:
                 rmin = i
 
-        imagemGray = imagem.copy()
+        new_img = img.copy()
         for i in range(rows):
             for j in range(columns):
                 if(rmax - rmin) <= 0: k = 0
-                else: k = np.abs(np.round(((imagem[i, j] - rmin) * 255)/(rmax - rmin)))
-                imagemGray[i,j] = k
+                else: k = np.round(((img[i, j] - rmin) * 255)/(rmax - rmin))
+                new_img[i,j] = k
+
+        return new_img
     
     @staticmethod 
     def histogram(image, L):
-        H=np.zeros(shape=(L,1))
+        hist = np.zeros(shape=(L,1))
+
         rows = len(image)
         columns = len(image[0])
+
         for i in range(rows):
             for j in range(columns):
-                k=image[i,j]
-                H[k,0]=H[k,0]+1
+                k = image[i,j]
+                hist[k,0] = hist[k,0] + 1
                 
-        return H
+        return hist
 

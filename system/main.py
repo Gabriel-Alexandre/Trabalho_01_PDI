@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-image = 'DancingInWater.jpg'
+image = 'einstein.png'
 
 image = Image.open(image)
 image = image.convert('RGB')
 image = np.array(image)
 
 new = None
+L = 256
 
 # RGB-YIQ-RGB
 # new = PdiSystem.convertRGBtoYIQ(image)
@@ -32,8 +33,28 @@ new = None
 # file = 'Q4.txt'  # Sobel horizontal
 # new = PdiSystem.correlationFilter(file, image)
 
-# file = 'Q5.txt'  # Sobel vertical
-# new = PdiSystem.correlationFilter(file, image)
+# new_img = Image.fromarray(np.uint8(new))
+# new_img = new_img.convert('L')
+# new = np.array(new_img)
+
+# plt.imshow(new, cmap='gray')
+# plt.show()
+
+# histgram = PdiSystem.histogram(new, L)
+# new = PdiSystem.histogramExpansion(new, L, histgram)
+
+file = 'Q5.txt'  # Sobel vertical
+new = PdiSystem.correlationFilter(file, image)
+
+new_img = Image.fromarray(np.uint8(new))
+new_img = new_img.convert('L')
+new = np.array(new_img)
+
+plt.imshow(new, cmap='gray')
+plt.show()
+
+histgram = PdiSystem.histogram(new, L)
+new = PdiSystem.histogramExpansion(new, L, histgram)
 
 # Mediana
 # m = 19
@@ -41,9 +62,10 @@ new = None
 # new = PdiSystem.medianFilter(image, m, n)
 
 # Controle de Saturação
-s = 1
-new = PdiSystem.saturationControl(s, image)
+# s = 1
+# new = PdiSystem.saturationControl(s, image)
 
 
-plt.imshow(new)
+plt.imshow(new, cmap='gray')
+# plt.imshow(new)
 plt.show()
